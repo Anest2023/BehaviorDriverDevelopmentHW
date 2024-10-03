@@ -13,9 +13,9 @@ public class DashboardPage {
 
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
-    private final SelenideElement heading = $("[data-test-id=]");
+    private final SelenideElement heading = $("[data-test-id=dashboard]");
     private final ElementsCollection cards = $$(".list__item div");
-    private final SelenideElement reloadButton = $("[data test-id='action-reload']");
+    private final SelenideElement reloadButton = $("[data-test-id='action-reload']");
 
     public DashboardPage() {
         heading.shouldBe(visible);
@@ -23,18 +23,23 @@ public class DashboardPage {
 
 
     public int getCardBalance(String maskedCardNumber) {
-        var text = cards.findBy(Condition.text(maskedCardNumber)).gettext();
+        var text = cards.findBy(Condition.text(maskedCardNumber)).getText();
         return extractBalance(text);
     }
 
-    public TransferPage selectCardToTransfer(DataHelper.Cardinfo cardinfo) {
-        cards.findBy(Condition.attribute("data-test-id", cardInfo.getTestId())), $("button").click();
+    public int getCardBalance(int index) {
+        var text = cards.get(index).getText();
+        return extractBalance(text);
+    }
+
+    public TransferPage selectCardToTransfer(DataHelper.CardInfo cardInfo) {
+        cards.findBy(Condition.attribute("data-test-id", cardInfo.getTestId())).$("button").click();
         return new TransferPage();
     }
 
 
     public void reloadDashboardPage() {
-        reloadbatton.click();
+        reloadButton.click();
         heading.shouldBe(visible);
     }
 
